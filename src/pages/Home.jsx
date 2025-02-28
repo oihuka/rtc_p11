@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import MovieList from '../components/MovieList';
+import LoadingSpinner from '../components/LoadingSpinner';
+import '../styles/pages/Home.css';
 
 function Home() {
   const [movies, setMovies] = useState([]);
@@ -24,10 +26,14 @@ function Home() {
     fetchMovies();
   }, []);
 
-  if (loading) return <div>Cargando...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return <LoadingSpinner message="Cargando películas populares..." />;
+  if (error) return <section className="error">{error}</section>;
 
-  return <MovieList movies={movies} />;
+  return (
+    <section className="home-container">
+      <MovieList movies={movies} useModal={true} />
+    </section>
+  );
 }
 
 export default Home;

@@ -1,34 +1,38 @@
 import { FaTimes, FaStar, FaArrowLeft } from 'react-icons/fa';
+import '../styles/components/MovieModal.css';
 
 function MovieModal({ movie, onClose }) {
   if (!movie) return null;
 
   return (
-    <div className="movie-modal-overlay" onClick={onClose}>
-      <div className="movie-modal-content" onClick={e => e.stopPropagation()}>
-        <div className="movie-modal-header">
+    <aside className="movie-modal-overlay" onClick={onClose}>
+      <article className="movie-modal-content" onClick={e => e.stopPropagation()}>
+        <header className="movie-modal-header">
           <button className="back-button" onClick={onClose}>
-            <FaArrowLeft /> Volver
+            <FaArrowLeft />
           </button>
           <button className="close-button" onClick={onClose}>
             <FaTimes />
           </button>
-        </div>
+        </header>
         
-        <div className="movie-modal-body">
-          <div className="movie-modal-poster">
-            <img 
-              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
-              alt={movie.title} 
-            />
-          </div>
+        <section className="movie-modal-body">
+          {movie.poster_path && (
+            <figure className="movie-modal-poster">
+              <img 
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} 
+                alt={movie.title} 
+                className="responsive-image"
+              />
+            </figure>
+          )}
           
-          <div className="movie-modal-info">
+          <section className="movie-modal-info">
             <h2>{movie.title}</h2>
             <div className="movie-meta">
-              <span className="year">{movie.release_date?.split('-')[0]}</span>
+              <time className="year">{movie.release_date?.split('-')[0]}</time>
               <span className="rating">
-                <FaStar /> {movie.vote_average?.toFixed(1)}
+                <FaStar className="star-icon" /> {movie.vote_average?.toFixed(1)}
               </span>
               <span className="runtime">{movie.runtime} min</span>
             </div>
@@ -41,32 +45,36 @@ function MovieModal({ movie, onClose }) {
               ))}
             </div>
 
-            <div className="movie-overview">
+            <section className="movie-overview">
               <h3>Sinopsis</h3>
               <p>{movie.overview}</p>
-            </div>
+            </section>
 
             {movie.production_companies?.length > 0 && (
-              <div className="movie-companies">
+              <section className="movie-companies">
                 <h3>Productoras</h3>
                 <p>{movie.production_companies.map(company => company.name).join(', ')}</p>
-              </div>
+              </section>
             )}
 
             {movie.release_date && (
-              <div className="movie-release">
+              <section className="movie-release">
                 <h3>Fecha de estreno</h3>
-                <p>{new Date(movie.release_date).toLocaleDateString('es-ES', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}</p>
-              </div>
+                <p>
+                  <time dateTime={movie.release_date}>
+                    {new Date(movie.release_date).toLocaleDateString('es-ES', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </time>
+                </p>
+              </section>
             )}
-          </div>
-        </div>
-      </div>
-    </div>
+          </section>
+        </section>
+      </article>
+    </aside>
   );
 }
 

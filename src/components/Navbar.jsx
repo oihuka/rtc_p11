@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { FaHome, FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import '../styles/components/Navbar.css';
 
-function Navbar({ onSearchResults, onReset }) {
+function Navbar() {
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
@@ -12,42 +12,35 @@ function Navbar({ onSearchResults, onReset }) {
     e.preventDefault();
     if (!searchTerm.trim()) return;
 
-    try {
-      const response = await axios.get(
-        `https://api.themoviedb.org/3/search/movie?api_key=83ec59640d4c10237655793a5eecaeb1&language=es-ES&query=${searchTerm}`
-      );
-      onSearchResults(response.data.results);
-    } catch (error) {
-      console.error('Error en la búsqueda:', error);
-    }
+    navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
+    setShowSearch(false);
   };
 
   const handleReset = () => {
     navigate('/');
     setShowSearch(false);
     setSearchTerm('');
-    onReset();
   };
 
   return (
     <nav className="navbar">
-      <div className="nav-content">
-        <div className="nav-brand">
-          <span className="nav-logo" onClick={handleReset}>MovieApp</span>
-        </div>
-        <div className="nav-actions">
+      <section className="nav-content">
+        <header className="nav-brand">
+          <h1 className="nav-logo" onClick={handleReset}>MovieApp</h1>
+        </header>
+        <section className="nav-actions">
           <FaHome 
             className="nav-icon" 
             onClick={handleReset}
             title="Inicio"
           />
-          <div className="search-container">
+          <section className="search-container">
             <FaSearch 
               className={`nav-icon ${showSearch ? 'active' : ''}`}
               onClick={() => setShowSearch(!showSearch)}
               title="Buscar"
             />
-            <div className={`search-dropdown ${showSearch ? 'show' : ''}`}>
+            <aside className={`search-dropdown ${showSearch ? 'show' : ''}`}>
               <form onSubmit={handleSubmit}>
                 <input
                   type="text"
@@ -58,10 +51,10 @@ function Navbar({ onSearchResults, onReset }) {
                 />
                 <button type="submit">Buscar</button>
               </form>
-            </div>
-          </div>
-        </div>
-      </div>
+            </aside>
+          </section>
+        </section>
+      </section>
     </nav>
   );
 }

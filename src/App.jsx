@@ -1,29 +1,26 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useState } from 'react';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import MovieDetail from './pages/MovieDetail';
-import MovieList from './components/MovieList';
-import './App.css'
+import Search from './pages/Search';
+import './styles/global.css';
 
 function App() {
-  const [searchResults, setSearchResults] = useState(null);
-
-  const handleSearchResults = (results) => {
-    setSearchResults(results);
-  };
-
-  const handleResetSearch = () => {
-    setSearchResults(null);
-  };
-
   return (
     <Router>
-      <Navbar onSearchResults={handleSearchResults} onReset={handleResetSearch} />
-      <Routes>
-        <Route path="/" element={searchResults ? <MovieList movies={searchResults} /> : <Home />} />
-        <Route path="/movie/:id" element={<MovieDetail />} />
-      </Routes>
+      <div className="App">
+        <Navbar />
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/movie/:id" element={<MovieDetail />} />
+            <Route path="/search" element={<Search />} />
+          </Routes>
+        </main>
+        <footer className="app-footer">
+          <p>© {new Date().getFullYear()} MovieApp - Datos proporcionados por TMDB</p>
+        </footer>
+      </div>
     </Router>
   );
 }
